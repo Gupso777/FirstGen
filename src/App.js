@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
- 
+
 // ── Supabase Config ──────────────────────────────────────────
-const SUPABASE_URL = "https://egrgfbqwnxmqlejn.supabase.co";
+const SUPABASE_URL = "https://egrgfbqwnxmqlejmpgdp.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVncmdmYnF3bnhtcWxlam1wZ2RwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODEzMDIsImV4cCI6MjA5Njk1NzMwMn0.YgzHpXqpWoAK8mWJBebh-Mh5EAJrWdHS8ENVIZuLIw8";
- 
+
 const T = {
   navy:"#0B0E1A", navyMid:"#131729", navyLight:"#1C2138", navyBorder:"#252A42",
   cream:"#F2EDE4", creamDim:"#9B9488", creamFaint:"#4A4640",
@@ -11,7 +11,7 @@ const T = {
   sage:"#4A9B7F", sageDim:"#4A9B7F22",
   gold:"#D4A853", goldDim:"#D4A85322",
 };
- 
+
 const SCHOLARSHIPS = [
   { id:1, name:"QuestBridge National College Match", org:"QuestBridge", amount:"Full ride — tuition, room & board", amountNum:999999, deadline:"Sep 30, 2026", url:"https://www.questbridge.org", noEssay:false, backgrounds:["all"], gpaMin:3.5, status:["high-school-senior"], description:"Full four-year scholarship to 55 top US colleges. For high-achieving, low-income students. Household income typically under $65K.", urgency:"high" },
   { id:2, name:"Dell Scholars Program", org:"Michael & Susan Dell Foundation", amount:"$20,000 + laptop + advising", amountNum:20000, deadline:"Dec 1, 2026", url:"https://www.dellscholars.org", noEssay:false, backgrounds:["all"], gpaMin:2.4, status:["high-school-senior"], description:"For first-gen, low-income students. Includes $20K, a laptop, Chegg credits, and ongoing support through graduation.", urgency:"high" },
@@ -28,7 +28,7 @@ const SCHOLARSHIPS = [
   { id:13, name:"Florida First Generation Matching Grant", org:"Florida Dept. of Education", amount:"Up to $1,491", amountNum:1491, deadline:"Aug 31, 2026", url:"https://www.floridastudentfinancialaidsg.org", noEssay:true, backgrounds:["all"], gpaMin:0, status:["college-student","community-college"], description:"For Florida residents who are first in their family to earn a bachelor's degree. Enrolled in a Florida state college. No essay.", urgency:"medium" },
   { id:14, name:"QuestBridge College Prep Scholars", org:"QuestBridge", amount:"Resources + college visit opportunities", amountNum:1000, deadline:"Mar 23, 2027", url:"https://www.questbridge.org/apply-to-college/programs/college-prep-scholars-program", noEssay:false, backgrounds:["all"], gpaMin:3.5, status:["high-school-student"], description:"For high school juniors with high achievement and financial need. Provides resources, college visits, and a head start on top applications.", urgency:"low" },
 ];
- 
+
 const SQ = [
   { id:"status", label:"Where are you right now?", options:[
     { value:"high-school-student", label:"High school (not senior yet)" },
@@ -55,7 +55,7 @@ const SQ = [
     { value:"no-essay", label:"Quick applications only (no essay)" },
   ]},
 ];
- 
+
 const studentGuide = [
   { emoji:"📧", title:"Emailing a Professor", tag:"Communication", color:T.coral, steps:["Use your school email — not Gmail.",'Open with "Dear Professor [Last Name],"',"State your name and course section.","Ask one clear question.",'Close with "Thank you" and your full name.'], example:'Dear Professor Chen,\n\nMy name is Destiny Williams and I\'m in your BIO 201 lecture (TR 11am). I had a question about whether the lab report should follow APA or MLA format.\n\nThank you,\nDestiny Williams' },
   { emoji:"🏢", title:"Office Hours Explained", tag:"Campus Life", color:T.sage, steps:["Professors sit in their office waiting for you — no appointment needed.","You can ask anything: homework, career advice, rec letters.","Going makes professors remember you positively.","Most students never go. You will stand out immediately."], example:null },
@@ -65,8 +65,8 @@ const studentGuide = [
   { emoji:"📋", title:"Reading a Syllabus", tag:"Academics", color:T.gold, steps:["The syllabus is a contract — professors can't change grading mid-semester.","Find the late work policy immediately.","Mark every due date in your phone the first week.","Don't buy required materials until week 2."], example:null },
   { emoji:"💳", title:"Your .edu Email = Free Money", tag:"Free Perks", color:T.coral, steps:["Amazon Prime Student: 6 months FREE, then ~$7.49/mo — free 2-day shipping, Prime Video, Prime Gaming.","Microsoft Office 365: 100% free — Word, Excel, PowerPoint, Teams + 1TB OneDrive storage.","Google AI Suite: Free for 1 year — Gemini 2.5 Pro, NotebookLM, 2TB storage. Sign up before Oct 6.","Notion Plus: Free for students — organize notes, tasks, and schedules in one place.","Spotify + Hulu bundle: ~$5.99/mo (normally $20+). Verified through UNiDAYS.","GitHub Student Developer Pack: Free domain, Canva Pro, GitHub Copilot AI, $200 in cloud credits + 100 more tools. Needs student ID to verify.","Adobe Creative Cloud: 60%+ off (~$20/mo) — Photoshop, Premiere Pro, Illustrator, and 20+ apps.","Autodesk: 50+ software downloads free for 1 year. Great for engineering or design majors.","Apple Education Store: Up to 10% off Macs/iPads. Back-to-school promo (through Sept) may include free AirPods.","Handshake: Free verified internship and job listings — sign up with your .edu email.","UNiDAYS and Student Beans: Unlock hundreds of brand discounts — Nike, ASOS, Samsung, and more."], example:"Most students never claim these. Amazon Prime + Microsoft Office + Spotify alone saves $300+ per year." },
 ];
- 
- 
+
+
 const COLLEGES = [
   { name:"UCLA", full:"University of California, Los Angeles", deadlines:[{date:"Nov 30",title:"UC Application Opens",cat:"Applications",urgency:"high"},{date:"Jan 31",title:"UC Application Deadline",cat:"Applications",urgency:"high"},{date:"Mar 1",title:"FAFSA/Dream Act Priority Deadline",cat:"Financial Aid",urgency:"high"},{date:"Apr 1",title:"Admission Decisions Released",cat:"Admissions",urgency:"medium"},{date:"May 1",title:"Enrollment Commitment Deadline",cat:"Admissions",urgency:"high"}]},
   { name:"NYU", full:"New York University", deadlines:[{date:"Nov 1",title:"Early Decision I Deadline",cat:"Applications",urgency:"high"},{date:"Jan 1",title:"Regular Decision Deadline",cat:"Applications",urgency:"high"},{date:"Feb 15",title:"FAFSA Priority Deadline",cat:"Financial Aid",urgency:"high"},{date:"Apr 1",title:"Admission Decisions",cat:"Admissions",urgency:"medium"},{date:"May 1",title:"Enrollment Deadline",cat:"Admissions",urgency:"high"}]},
@@ -76,16 +76,16 @@ const COLLEGES = [
   { name:"Michigan", full:"University of Michigan", deadlines:[{date:"Nov 1",title:"Early Action Deadline",cat:"Applications",urgency:"high"},{date:"Feb 1",title:"Regular Decision Deadline",cat:"Applications",urgency:"medium"},{date:"Apr 1",title:"FAFSA Deadline",cat:"Financial Aid",urgency:"high"},{date:"Apr 15",title:"Admission Decisions",cat:"Admissions",urgency:"medium"},{date:"May 1",title:"Enrollment Commitment",cat:"Admissions",urgency:"high"}]},
   { name:"Community College", full:"Your Community College", deadlines:[{date:"Oct 1",title:"FAFSA Opens — File Now",cat:"Financial Aid",urgency:"high"},{date:"Nov 15",title:"Spring Enrollment Opens",cat:"Enrollment",urgency:"medium"},{date:"Jan 15",title:"FAFSA Priority Deadline (most states)",cat:"Financial Aid",urgency:"high"},{date:"Mar 1",title:"Summer/Fall Enrollment Opens",cat:"Enrollment",urgency:"medium"},{date:"Apr 15",title:"Financial Aid Award Letters Arrive",cat:"Financial Aid",urgency:"medium"}]},
 ];
- 
+
 const anonQuestions = [
   { q:"Is it embarrassing to go to the tutoring center?", a:"No. Smart students use every free resource. The tutoring center exists because everyone needs it.", votes:142 },
   { q:"Can I really negotiate my financial aid?", a:"Yes. Email the financial aid office with a competing offer or changed family circumstances. It works more often than you'd think.", votes:98 },
   { q:"What if I fail a class?", a:"Talk to your advisor immediately. Retaking or academic forgiveness may be options. Don't disappear — that makes it worse.", votes:87 },
   { q:"Do I have to pick a major right away?", a:"Most schools give you until sophomore year. 'Undecided' is a real, valid option.", votes:76 },
 ];
- 
+
 const UC = (u) => u==="high" ? T.coral : u==="medium" ? T.gold : T.sage;
- 
+
 // ── Auth Modal ─────────────────────────────────────────────────
 function AuthModal({ authMode, setAuthMode, authEmail, setAuthEmail, authPassword, setAuthPassword, authName, setAuthName, authError, authLoading, handleAuth, handleForgotPassword, onContinueAsGuest, accent, isHardGate }) {
   if (authMode === "forgot") {
@@ -103,7 +103,7 @@ function AuthModal({ authMode, setAuthMode, authEmail, setAuthEmail, authPasswor
           )}
         </div>
       </div>
- 
+
       {/* Guest banner */}
       {!user && (
         <div style={{ background:`${T.coral}12`, borderBottom:`1px solid ${T.coral}25`, padding:"10px 20px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
@@ -113,10 +113,10 @@ function AuthModal({ authMode, setAuthMode, authEmail, setAuthEmail, authPasswor
           </button>
         </div>
       )}
- 
+
       {/* Scrollable Content */}
       <div style={{ padding:"20px 20px 120px", overflowY:"auto", maxHeight:"calc(100vh - 130px)" }}>
- 
+
         {/* ── HOME ── */}
         {screen==="home" && (
           <div className="slide">
@@ -156,7 +156,7 @@ function AuthModal({ authMode, setAuthMode, authEmail, setAuthEmail, authPasswor
             </div>
           </div>
         )}
- 
+
         {/* ── GUIDE ── */}
         {screen==="guide" && !selectedTopic && (
           <div className="slide">
@@ -200,7 +200,7 @@ function AuthModal({ authMode, setAuthMode, authEmail, setAuthEmail, authPasswor
             )}
           </div>
         )}
- 
+
         {/* ── COLLEGES ── */}
         {screen==="colleges" && !selectedCollege && (
           <div className="slide">
@@ -256,7 +256,7 @@ function AuthModal({ authMode, setAuthMode, authEmail, setAuthEmail, authPasswor
             </div>
           </div>
         )}
- 
+
         {/* ── SCHOLARSHIPS ── */}
         {screen==="scholarships" && schStep===0 && (
           <div className="slide">
@@ -293,7 +293,7 @@ function AuthModal({ authMode, setAuthMode, authEmail, setAuthEmail, authPasswor
         {screen==="scholarships" && schStep > SQ.length && (
           <ScholarshipResults results={getSchResults()} expandedSch={expandedSch} setExpandedSch={setExpandedSch} onReset={() => { setSchStep(0); setSchAnswers({}); setExpandedSch(null); }} accent={accent} savedScholarships={savedScholarships} toggleSaveScholarship={toggleSaveScholarship} user={user} onRequireAuth={() => { setAuthMode("signup"); setIsHardGate(true); setShowAuth(true); }} />
         )}
- 
+
         {/* ── DECODE ── */}
         {screen==="decode" && (
           <div className="slide">
@@ -312,7 +312,7 @@ function AuthModal({ authMode, setAuthMode, authEmail, setAuthEmail, authPasswor
             )}
           </div>
         )}
- 
+
         {/* ── ASK ── */}
         {screen==="ask" && (
           <div className="slide">
@@ -331,9 +331,9 @@ function AuthModal({ authMode, setAuthMode, authEmail, setAuthEmail, authPasswor
             </div>
           </div>
         )}
- 
+
       </div>
- 
+
       {/* Bottom Nav */}
       <div style={{ position:"fixed", bottom:0, left:"50%", transform:"translateX(-50%)", width:"100%", maxWidth:430, background:T.navy, borderTop:`1px solid ${T.navyBorder}`, display:"flex", justifyContent:"space-around", padding:"10px 0 18px" }}>
         {navItems.map(n => (
@@ -346,4 +346,3 @@ function AuthModal({ authMode, setAuthMode, authEmail, setAuthEmail, authPasswor
     </div>
   );
 }
- 
