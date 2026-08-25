@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Analytics } from "@vercel/analytics/react";
 
 // ── Supabase Config ──────────────────────────────────────────
 const SUPABASE_URL = "https://egrgfbqwnxmqlejmpgdp.supabase.co";
