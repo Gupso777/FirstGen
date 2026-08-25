@@ -375,7 +375,6 @@ export default function App() {
   };
 
   // ── App state ──────────────────────────────────────────────
-  const [mode, setMode] = useState(null);
   const [screen, setScreen] = useState("home");
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [collegeQuery, setCollegeQuery] = useState("");
@@ -445,9 +444,9 @@ export default function App() {
     }).catch(() => {});
   };
 
-  const accent = mode==="parent" ? T.sage : T.coral;
-  const accentDim = mode==="parent" ? T.sageDim : T.coralDim;
-  const guide = mode==="parent" ? parentGuide : studentGuide;
+  const accent = T.coral;
+  const accentDim = T.coralDim;
+  const guide = studentGuide;
 
   const handleCollegeSearch = async (q) => {
     setCollegeQuery(q);
@@ -469,7 +468,7 @@ export default function App() {
     if (!decodeText.trim()) return;
     setDecoding(true); setDecodeResult("");
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, messages:[{ role:"user", content:`You help a first-generation college ${mode==="parent"?"student's parent":"student"} understand confusing college documents. Explain in plain English using bullet points. Flag anything important with ⚠️. Be warm and direct.\n\n"${decodeText}"` }] }) });
+      const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, messages:[{ role:"user", content:`You help a first-generation college student understand confusing college documents. Explain in plain English using bullet points. Flag anything important with ⚠️. Be warm and direct.\n\n"${decodeText}"` }] }) });
       const data = await res.json();
       setDecodeResult(data.content?.[0]?.text || "Couldn't decode that. Try again.");
     } catch { setDecodeResult("Something went wrong. Please try again."); }
@@ -515,55 +514,7 @@ export default function App() {
   `;
 
   // ── MODE SELECTOR ──────────────────────────────────────────
-  if (!mode) return (
-    <div style={{ minHeight:"100vh", background:T.navy, display:"flex", flexDirection:"column", fontFamily:"'DM Sans',sans-serif" }}>
-      <style>{CSS}</style>
-      <div style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"32px 24px", gap:40 }}>
-        <div className="fu" style={{ textAlign:"center" }}>
-          <div style={{ fontFamily:"'Playfair Display',serif", fontSize:13, letterSpacing:"0.25em", color:T.creamDim, textTransform:"uppercase", marginBottom:10 }}>Welcome to</div>
-          <div style={{ fontFamily:"'Playfair Display',serif", fontSize:52, color:T.cream, lineHeight:1, marginBottom:8 }}>FirstGen</div>
-          <div style={{ fontFamily:"'Playfair Display',serif", fontStyle:"italic", fontSize:18, color:T.creamDim }}>The guide they forgot to give you</div>
-        </div>
-        <div className="fu" style={{ width:"100%", maxWidth:360, animationDelay:"0.15s", opacity:0 }}>
-          <div style={{ color:T.creamDim, fontSize:12, letterSpacing:"0.15em", textTransform:"uppercase", textAlign:"center", marginBottom:18 }}>I am a</div>
-          <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-            {[
-              { m:"student", icon:"🎓", title:"Student", sub:"First in my family to go to college", border:T.coral },
-              { m:"parent", icon:"👨‍👩‍👧", title:"Parent", sub:"Supporting my first-gen student", border:T.sage },
-            ].map(item => (
-              <button key={item.m} onClick={gate(() => { setMode(item.m); setScreen("home"); })} style={{ background:T.navyMid, border:`1.5px solid ${item.border}`, borderRadius:20, padding:"22px 24px", cursor:"pointer", textAlign:"left", display:"flex", alignItems:"center", gap:18, transition:"background 0.2s" }}
-                onMouseEnter={e => e.currentTarget.style.background=`${item.border}15`}
-                onMouseLeave={e => e.currentTarget.style.background=T.navyMid}
-              >
-                <div style={{ fontSize:34 }}>{item.icon}</div>
-                <div>
-                  <div style={{ fontFamily:"'Playfair Display',serif", fontSize:22, color:T.cream, marginBottom:3 }}>{item.title}</div>
-                  <div style={{ fontSize:13, color:T.creamDim }}>{item.sub}</div>
-                </div>
-                <div style={{ marginLeft:"auto", color:item.border, fontSize:20 }}>›</div>
-              </button>
-            ))}
-          </div>
-          <div style={{ marginTop:20, display:"flex", justifyContent:"center" }}>
-            <button onClick={() => { setAuthMode("login"); setShowAuth(true); setIsHardGate(false); }} style={{ background:"none", border:"none", color:T.creamDim, fontSize:13, cursor:"pointer", fontFamily:"'DM Sans',sans-serif" }}>
-              Already have an account? <span style={{ color:T.coral }}>Log in</span>
-            </button>
-          </div>
-        </div>
-      </div>
-      {showAuth && <AuthModal {...{authMode,setAuthMode,authEmail,setAuthEmail,authPassword,setAuthPassword,authName,setAuthName,authError,authLoading,handleAuth,handleForgotPassword,onContinueAsGuest:handleContinueAsGuest,accent:T.coral,isHardGate}} />}
-    </div>
-  );
 
-  // ── MAIN APP ───────────────────────────────────────────────
-  const navItems = [
-    { icon:"🏠", label:"Home", s:"home" },
-    { icon:"📖", label:"Guide", s:"guide" },
-    { icon:"🏫", label:"Colleges", s:"colleges" },
-    { icon:"🎓", label:"Scholarships", s:"scholarships" },
-    { icon:"🗂️", label:"Decode", s:"decode" },
-    { icon:"🙋", label:"Ask", s:"ask" },
-  ];
 
   return (
     <div style={{ minHeight:"100vh", background:T.navy, color:T.cream, fontFamily:"'DM Sans',sans-serif", maxWidth:430, margin:"0 auto", position:"relative" }}>
@@ -576,7 +527,7 @@ export default function App() {
       <div style={{ padding:"16px 20px 14px", display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:`1px solid ${T.navyBorder}` }}>
         <div>
           <div style={{ fontFamily:"'Playfair Display',serif", fontSize:22, color:T.cream }}>FirstGen</div>
-          <div style={{ fontSize:10, color:T.creamDim, letterSpacing:"0.12em", textTransform:"uppercase", marginTop:1 }}>{mode==="parent" ? "Parent Guide" : "Student Guide"}</div>
+          <div style={{ fontSize:10, color:T.creamDim, letterSpacing:"0.12em", textTransform:"uppercase", marginTop:1 }}>"Student Guide"</div>
         </div>
         <div style={{ display:"flex", gap:8, alignItems:"center" }}>
           {user ? (
@@ -588,9 +539,6 @@ export default function App() {
               Sign Up
             </button>
           )}
-          <button onClick={() => { setMode(null); setScreen("home"); setSelectedTopic(null); setSelectedCollege(null); setSchStep(0); setSchAnswers({}); }} style={{ background:T.navyLight, border:`1px solid ${T.navyBorder}`, borderRadius:10, color:T.creamDim, fontSize:11, fontWeight:600, padding:"6px 12px", cursor:"pointer", fontFamily:"'DM Sans',sans-serif" }}>
-            Switch
-          </button>
         </div>
       </div>
 
@@ -612,10 +560,10 @@ export default function App() {
           <div className="slide">
             <div style={{ marginBottom:28 }}>
               <div style={{ fontFamily:"'Playfair Display',serif", fontSize:30, lineHeight:1.2, marginBottom:8 }}>
-                {mode==="parent" ? <>Everything you need to <em style={{color:accent}}>support</em> them.</> : <>The rules they <em style={{color:accent}}>forgot</em> to tell you.</>}
+                <>The rules they <em style={{color:accent}}>forgot</em> to tell you.</>
               </div>
               <div style={{ color:T.creamDim, fontSize:14, lineHeight:1.6 }}>
-                {mode==="parent" ? "A guide for parents navigating college alongside their first-gen student." : "What college-educated families already know — now yours too."}
+                "What college-educated families already know — now yours too."
               </div>
             </div>
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:24 }}>
