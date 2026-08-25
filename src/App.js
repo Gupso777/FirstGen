@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 // ── Supabase Config ──────────────────────────────────────────
 const SUPABASE_URL = "https://egrgfbqwnxmqlejmpgdp.supabase.co";
@@ -256,7 +257,7 @@ function ScholarshipResults({ results, expandedSch, setExpandedSch, onReset, acc
 // ══════════════════════════════════════════════════════════════
 export default function App() {
 
-  // ── Auth ───────────────────────────────────────────────────
+  // ── Auth ─────────────────────────────────────────���─────────
   const [user, setUser] = useState(null);
   const [showAuth, setShowAuth] = useState(false);
   const [isHardGate, setIsHardGate] = useState(false);
@@ -833,6 +834,7 @@ export default function App() {
           </button>
         ))}
       </div>
+      <Analytics />
     </div>
   );
 }
